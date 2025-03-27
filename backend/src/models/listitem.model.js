@@ -1,5 +1,5 @@
  import mongoose from "mongoose";
- 
+
 const listItemSchema = new mongoose.Schema({
     listID: {
       type: mongoose.Schema.Types.ObjectId,
@@ -49,19 +49,6 @@ const listItemSchema = new mongoose.Schema({
     edible: {
       description: String,
       imageURL: String,
-      quality: {
-        type: String,
-        enum: ["Excellent", "Good", "Fair", "Poor"],
-      },
-      freshness: {
-        type: String,
-        enum: ["Fresh", "Stale", "Expired"],
-      },
-      overallScore: {
-        type: Number,
-        min: 1,
-        max: 10,
-      },
     },
   }, { timestamps: true });
   
