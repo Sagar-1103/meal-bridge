@@ -31,3 +31,8 @@ export const createlist = AsyncHandler(async(req,res)=>{
       data: savedListItem,
     });
 })
+
+export const charitylist = AsyncHandler(async(req,res)=>{
+})
+
+
