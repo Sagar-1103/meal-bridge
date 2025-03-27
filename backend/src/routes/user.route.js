@@ -1,10 +1,12 @@
 import { Router } from "express";
-import { businessSignup, loginUser } from "../controllers/user.controller.js";
+import { businessSignup, charitySignup, loginUser, volunteerSignup } from "../controllers/user.controller.js";
 
 const router = Router();
 
-router.route("/login",loginUser);
+router.post("/login",loginUser);
 
-router.route("/business-signup",businessSignup);
+router.post("/business-signup",businessSignup);
+router.post("/charity-signup",charitySignup);
+router.post("/volunteer-signup",volunteerSignup);
 
 export default router;
