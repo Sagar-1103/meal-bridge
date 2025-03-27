@@ -47,7 +47,14 @@ export const createlist = AsyncHandler(async(req,res)=>{
 
     const base64Image1 = image_base_64.toString('base64');
 
+    if(!base64Image1){
+      return res.status(500).json({ message: "No base 64 image converted" });
+    }
+
     const imageURL = await uploadToCloudinary(base64Image1);
+    if(!imageURL){
+      return res.status(500).json({ message: "No image url of the base 64 image" });
+    }
 
     // Create new ListItem
     const listItem = new listitemModel({
