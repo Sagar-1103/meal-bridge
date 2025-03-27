@@ -22,9 +22,7 @@ const BussinessProfileSchema = new mongoose.Schema({
     zipcode: String,
     country: String,
   },
-  businesslocation:{
-    type:locationSchema,
-  },
+  businesslocation:locationSchema,
   contact: {
     phone: {
       type: String,
@@ -62,6 +60,8 @@ const BussinessProfileSchema = new mongoose.Schema({
     default: [],
   },
 }, { timestamps: true });
+
+BussinessProfileSchema.index({ businesslocation: "2dsphere" });
 
 export default mongoose.model("BussinessProfile",BussinessProfileSchema );
 

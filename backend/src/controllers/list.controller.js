@@ -32,7 +32,73 @@ export const createlist = AsyncHandler(async(req,res)=>{
     });
 })
 
-export const charitylist = AsyncHandler(async(req,res)=>{
-})
+export const charitylist = AsyncHandler(async (req, res) => {
+    const { charityID, category, minWeight, maxDistance } = req.query;
+
+    if (!charityID) {
+        return res.status(400).json({ message: "charityID is required" });
+    }
+
+    // Get charity's location
+    const charity = await charityProfileModel.findById(charityID);
+    if (!charity || !charity.charitylocation) {
+        return res.status(404).json({ message: "Charity location not found" });
+    }
+
+    const { coordinates } = charity.charitylocation;
+    const [longitude, latitude] = coordinates;
+
+    // Find nearby businesses sorted in descending order of distance
+    let nearbyBusinesses = await bussinessProfileModel.aggregate([
+        {
+            $geoNear: {
+                near: { type: "Point", coordinates: [longitude, latitude] },
+                distanceField: "distance",
+                key: "businesslocation",
+                spherical: true,
+            },
+        },
+        { $sort: { distance: -1 } } // Sorting in decreasing order
+    ]);
+    console.log(nearbyBusinesses)
+    const businessIDs = nearbyBusinesses.map((b) => b.businessID);
+    console.log(businessIDs)
+
+    // Applying filters
+    const filters = { businessID: { $in: businessIDs } };
+
+    // if (category) {
+    //     filters["foodDetails.category"] = category;
+    // }
+
+    // if (minWeight) {
+    //     filters["foodDetails.weight"] = { $gte: parseFloat(minWeight) };
+    // }
+
+    const listItems = await listitemModel.find(filters)
+    console.log(listItems)
+
+    res.status(200).json({ success: true, data: listItems });
+});
+
+export const businesslist = AsyncHandler(async (req, res) => {
+    const { businessID } = req.query;
+
+    if (!businessID) {
+        return res.status(400).json({ message: "businessID is required" });
+    }
+
+    // Get business details
+    const list = await listitemModel.find({businessID:businessID});
+    if (!list) {
+        return res.status(404).json({ message: "Business location not found" });
+    }
+
+
+
+    res.status(200).json({ success: true, data: list });
+});
+
+
 
 

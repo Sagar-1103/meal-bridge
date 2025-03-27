@@ -29,9 +29,7 @@ const volunteerSchema = new mongoose.Schema({
       trim: true,
     },
   },
-  volunteerlocation:{
-    type:locationSchema,
-  },
+  volunteerlocation:locationSchema,
   verifiedStatus: {
     type: String,
     enum: ["pending", "verified", "rejected"],
@@ -91,5 +89,7 @@ const volunteerSchema = new mongoose.Schema({
     ref: "ListItem",
   }],
 }, { timestamps: true });
+
+volunteerSchema.index({ volunteerlocation: "2dsphere" });
 
 export default mongoose.model("Volunteer", volunteerSchema);

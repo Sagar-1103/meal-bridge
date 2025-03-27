@@ -36,9 +36,7 @@ const charitySchema = new mongoose.Schema({
     },
     website: String,
   },
-  charitylocation:{
-    type:locationSchema,
-  },
+  charitylocation:locationSchema,
   verificationStatus: {
     type: String,
     enum: ["Pending", "Verified", "Rejected"],
@@ -72,5 +70,7 @@ const charitySchema = new mongoose.Schema({
     default: Date.now,
   },
 }, { timestamps: true });
+
+charitySchema.index({ charitylocation: "2dsphere" });
 
 export default mongoose.model("CharityProfile", charitySchema);

@@ -45,7 +45,7 @@ export const loginUser = AsyncHandler(async(req,res)=>{
 })
 
 export const businessSignup = AsyncHandler(async(req,res)=>{
-    const { name, address, contact, openingHours, deliveryOptions, registrationNumber, foodSafetyCertifications, password } = req.body;
+    const { name, address, contact, openingHours, deliveryOptions, registrationNumber, foodSafetyCertifications, password ,bussinesslocation} = req.body;
 
     if (!name || !contact?.phone || !contact?.email || !password) {
       return res.status(400).json({ message: "Name, phone, email, and password are required." });
@@ -59,6 +59,11 @@ export const businessSignup = AsyncHandler(async(req,res)=>{
 
       const hashedPassword = await bcrypt.hash(password, 10);
 
+      const formattedLocation = {
+        type: "Point",
+        coordinates: bussinesslocation.coordinates, // Ensure it's [longitude, latitude]
+      };
+
       const business = new bussinessProfileModel({
         name,
         address,
@@ -68,6 +73,7 @@ export const businessSignup = AsyncHandler(async(req,res)=>{
         registrationNumber,
         foodSafetyCertifications,
         password: hashedPassword,
+        businesslocation:formattedLocation,
       });
 
       await business.save();
@@ -150,7 +156,7 @@ export const volunteerSignup = AsyncHandler(async(req,res)=>{
 })
 
 export const charitySignup = AsyncHandler(async(req,res)=>{
-    const { name, address, contact, verificationStatus, foodRequirements, operatingHours, password } = req.body;
+    const { name, address, contact, verificationStatus, foodRequirements, operatingHours, password , charitylocation } = req.body;
 
     if (!name || !contact?.phone || !contact?.email || !foodRequirements?.category || !foodRequirements?.maxCapacityKg || !password) {
       return res.status(400).json({ message: "Name, phone, email, food requirements, and password are required." });
@@ -164,6 +170,11 @@ export const charitySignup = AsyncHandler(async(req,res)=>{
 
       const hashedPassword = await bcrypt.hash(password, 10);
 
+      const formattedLocation = {
+        type: "Point",
+        coordinates: charitylocation.coordinates, // Ensure it's [longitude, latitude]
+      };
+
       const charity = new charityProfileModel({
         name,
         address,
@@ -172,6 +183,7 @@ export const charitySignup = AsyncHandler(async(req,res)=>{
         foodRequirements,
         operatingHours,
         password: hashedPassword,
+        charitylocation: formattedLocation
       });
 
       
