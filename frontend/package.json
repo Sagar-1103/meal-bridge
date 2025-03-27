@@ -23,6 +23,7 @@
     "react-native": "0.73.6",
     "react-native-checkbox": "^2.0.0",
     "react-native-image-crop-picker": "^0.41.1",
+    "react-native-linear-gradient": "^2.8.3",
     "react-native-modal": "^14.0.0-rc.1",
     "react-native-push-notification": "^8.1.1",
     "react-native-responsive-fontsize": "^0.5.1",

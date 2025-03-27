@@ -1,27 +1,44 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
+import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, ActivityIndicator, RefreshControl } from 'react-native';
 import { BACKEND_URL } from '../../constants/Environments';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthProvider';
+import { useFocusEffect } from '@react-navigation/native';
 
 const BusinessListing = () => {
     const [foodList, setFoodList] = useState([]);
     const [expandedItem, setExpandedItem] = useState(null);
     const { user } = useAuth();
+    const listRef = useRef(null);
+    const [loading, setLoading] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
 
-    useEffect(() => {
-        getLists();
-    }, []);
+    useFocusEffect(
+        useCallback(() => {
+            getLists();
+            if (listRef.current) {
+                listRef.current.scrollToOffset({ animated: true, offset: 0 });
+            }
+        }, [])
+    );
 
     const getLists = async () => {
         try {
+            setLoading(true);
             const url = `${BACKEND_URL}/list/business?businessID=${user.businessID}`;
             const response = await axios.get(url);
-            const res = await response.data;
-            setFoodList(res.data);
+            setFoodList(response.data?.data || []);
         } catch (error) {
             console.log("Error fetching data:", error);
+        } finally {
+            setLoading(false);
         }
+    };
+
+    const onRefresh = async () => {
+        setRefreshing(true);
+        await getLists();
+        setRefreshing(false);
     };
 
     const toggleExpand = (id) => {
@@ -49,11 +66,9 @@ const BusinessListing = () => {
                     <Text style={styles.detail}>Status: <Text style={styles.status}>{item?.foodDetails?.status}</Text></Text>
                     <Text style={styles.detail}>Quality: <Text style={styles.quality}>{item?.edible?.quality} ({item?.edible?.freshness})</Text></Text>
                     <Text style={styles.detail}>Overall Score: <Text style={styles.score}>{item?.edible?.overallScore}/10</Text></Text>
-                    <Text style={styles.detail}>Best Before: {item?.edible?.description}</Text>
                     <Text style={styles.detail}>List ID: {item?.listID}</Text>
-                    <Text style={styles.detail}>Charity ID: {item?.charityID}</Text>
-                    <Text style={styles.detail}>Volunteer ID: {item?.volunteerID}</Text>
-                    <Text style={styles.detail}>Created At: {new Date(item?.createdAt)?.toLocaleString()}</Text>
+                    {item.charityID && <Text style={styles.detail}>Charity ID: {item?.charityID}</Text>}
+                    {item.volunteerID && <Text style={styles.detail}>Volunteer ID: {item?.volunteerID}</Text>}
                 </View>
             )}
         </TouchableOpacity>
@@ -62,11 +77,21 @@ const BusinessListing = () => {
     return (
         <View style={styles.container}>
             <Text style={styles.header}>Business Food Listings</Text>
-            <FlatList
-                data={foodList}
-                renderItem={renderItem}
-                keyExtractor={(item) => item?._id}
-            />
+
+            {loading ? (
+                <ActivityIndicator size="large" color="#e67e22" />
+            ) : (
+                <FlatList
+                    ref={listRef}
+                    data={foodList}
+                    renderItem={renderItem}
+                    keyExtractor={(item) => item?._id}
+                    refreshControl={
+                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={['#e67e22']} />
+                    }
+                    
+                />
+            )}
         </View>
     );
 };
@@ -85,7 +110,7 @@ const styles = StyleSheet.create({
         color: '#e67e22',
     },
     card: {
-        backgroundColor:"#FFF9F5",
+        backgroundColor: "#FFF9F5",
         padding: 16,
         marginBottom: 12,
         borderRadius: 12,

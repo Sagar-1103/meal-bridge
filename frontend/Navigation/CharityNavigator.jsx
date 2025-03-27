@@ -3,8 +3,7 @@ import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CharityProfile from '../Screens/charity/CharityProfile';
 import CharityListing from '../Screens/charity/CharityListing';
-import { View } from 'react-native';
-import OrderTracking from "../Screens/charity/OrderTracking";
+import CharityOrderTracking from '../Screens/charity/CharityOrderTracking';
 const Tab = createBottomTabNavigator();
 
 const tabData = [
@@ -18,7 +17,7 @@ const tabData = [
   },
   {
     name: 'Track Order',
-    component: OrderTracking,
+    component: CharityOrderTracking,
     icons: {
       inactive: 'map-outline',
       active: 'map',
