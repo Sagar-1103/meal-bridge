@@ -1,17 +1,14 @@
 // Import libraries
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import ToastManager, { Toast } from "toastify-react-native";
 // Create a component
 const RoleSelector = ({navigation}) => {
     const handleNextScreen = async(role)=>{
-        // navigation.navigate("Login",{role});
-        Toast.success("Promised is resolved");
+        navigation.navigate("Login",{role});
     }
 
     return (
         <View style={styles.container}>
-             <ToastManager/>
             <Text style={styles.title}>Select Your Role</Text>
             
             <TouchableOpacity onPress={()=>{handleNextScreen("business")}} style={styles.button}>
