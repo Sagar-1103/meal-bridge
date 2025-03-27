@@ -6,7 +6,47 @@ import volunteerProfileModel from "../models/volunteerProfile.model.js";
 import jwt from 'jsonwebtoken'
 
 export const loginUser = AsyncHandler(async(req,res)=>{
-    
+    const { email, password, role } = req.body;
+
+  if (!email || !password || !role) {
+    return res.status(400).json({ message: "Email, password, and role are required" });
+  }
+
+  let user;
+  if (role === "business") {
+    user = await bussinessProfileModel.findOne({ "contact.email": email });
+  } else if (role === "charity") {
+    user = await charityProfileModel.findOne({ "contact.email": email });
+  } else if (role === "volunteer") {
+    user = await volunteerProfileModel.findOne({ "contact.email": email });
+  } else {
+    return res.status(400).json({ message: "Invalid role specified" });
+  }
+
+  // Check if user exists
+  if (!user) {
+    return res.status(401).json({ message: "Invalid credentials" });
+  }
+
+  // Verify password
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) {
+    return res.status(401).json({ message: "Invalid credentials" });
+  }
+
+  // Generate JWT token
+  const token = jwt.sign({ id: user._id, role }, process.env.JWT_SECRET, { expiresIn: "7d" });
+
+  res.status(200).json({
+    message: "Login successful",
+    token,
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.contact.email,
+      role,
+    },
+  });
 })
 
 export const businessSignup = AsyncHandler(async(req,res)=>{
@@ -101,7 +141,14 @@ export const volunteerSignup = AsyncHandler(async(req,res)=>{
         });
     
         await newVolunteer.save();
-        res.status(201).json({ message: "Volunteer registered successfully", volunteer: newVolunteer });
+        
+        const token = jwt.sign(
+            { id: newVolunteer._id, role: "volunteer" }, 
+            process.env.JWT_SECRET,
+            { expiresIn: "7d" }
+        );
+  
+        res.status(201).json({ message: "Volunteer registered successfully", volunteer: newVolunteer,token });
       } catch (error) {
         res.status(500).json({ message: "Server error", error: error.message });
       }
@@ -132,8 +179,15 @@ export const charitySignup = AsyncHandler(async(req,res)=>{
         password: hashedPassword,
       });
 
+      
+    const token = jwt.sign(
+        { id: charity._id, role: "charity" }, 
+        process.env.JWT_SECRET,
+        { expiresIn: "7d" }
+    );
+  
       await charity.save();
-      res.status(201).json({ message: "Charity registered successfully", charity });
+      res.status(201).json({ message: "Charity registered successfully", charity,token });
     } catch (error) {
       res.status(500).json({ message: "Server error", error: error.message });
     }

@@ -3,7 +3,8 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import {ApiResponse} from "./utils/ApiResponse.js";
 import userRouter from "./routes/user.route.js";
-import BussinesRoute from './routes/user.route.js'
+import profileRoutes from './routes/user.route.js'
+import listRoutes from './routes/list.route.js'
 
 const app = express();
 
@@ -21,8 +22,8 @@ app.use(express.json());
 app.get("/",(req,res)=>{
     res.status(200).json(new ApiResponse(200,{status:"Connected"},"Mealbridge backend server running... "));
 })
-app.use('/register',BussinesRoute)
 
-app.use("/users",userRouter);
+app.use('/list',listRoutes)
+app.use("/users",profileRoutes);
 
 export {app}

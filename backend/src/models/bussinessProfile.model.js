@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import locationSchema from "./location.model.js";
 
 const BussinessProfileSchema = new mongoose.Schema({
-  BussinessID: {
+  businessID: {
     type: mongoose.Schema.Types.ObjectId,
     auto: true,
   },
