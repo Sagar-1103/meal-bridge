@@ -6,11 +6,12 @@ import { View,Text,TextInput,TouchableOpacity, StyleSheet,
     Image, 
     Dimensions 
   } from 'react-native';
-  
+import {useAuth} from "../context/AuthProvider";
   const { width, height } = Dimensions.get('window');
 
 const Login = ({navigation,route}) => {
-    const {role,setUser,setToken} = route.params;
+    const {role} = route.params;
+    const {setUser,setToken,setRole} = useAuth();
     const [tempEmail,setTempEmail] = useState("");
     const [tempPassword,setTempPassword] = useState("");
 
@@ -21,26 +22,25 @@ const Login = ({navigation,route}) => {
 
     const handleLogin = async()=>{
         try {
-            const url = `${BACKEND_URL}`;
-            const response = await axios.post(url,{email:tempEmail,password:tempPassword,role},{
-                headers:{
-                    "Content-Type": "application/json"
-                }
-            });
+          console.log(tempEmail,tempPassword,role);
+          const url = `${BACKEND_URL}/users/login`;
+          const response = await axios.post(url,{email:tempEmail,password:tempPassword,role},{
+              headers:{
+                  "Content-Type": "application/json"
+              }
+          });
 
             const res = await response.data;
-
-            if(res.success){
-                setUser(res.data.user);
-                setToken(res.data.token);
-                await AsyncStorage.setItem('token',res.data.token);
-                await AsyncStorage.setItem('user',JSON.stringify(res.data.user));
-            }
+              setUser(res.user);
+              setToken(res.token);
+              setRole(role);
+              await AsyncStorage.setItem('token',res.token);
+              await AsyncStorage.setItem('role',role);
+              await AsyncStorage.setItem('user',JSON.stringify(res.user));
         } catch (error) {
-            console.log(error.response.data.message);
+            console.log(error);
         }
     }
-    
     return (
         <View style={styles.container}>
           <Image 
@@ -106,6 +106,7 @@ const Login = ({navigation,route}) => {
       input: {
         height: height * 0.07, // 6% of screen height
         borderColor: '#ddd',
+        color:"black",
         borderWidth: 1,
         borderRadius: width * 0.04, // 2% of screen width
         paddingHorizontal: width * 0.04,

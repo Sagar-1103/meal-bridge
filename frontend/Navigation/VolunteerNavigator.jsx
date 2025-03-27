@@ -3,6 +3,9 @@ import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import VolunteerProfile from '../Screens/volunteer/VolunteerProfile';
 import VolunteerDeliveries from '../Screens/volunteer/VolunteerDeliveries';
+import { StyleSheet, Text, View } from 'react-native';
+import OrderTracking from "../Screens/charity/OrderTracking";
+import DeliveryTracking from '../Screens/charity/OrderTracking';
 
 const Tab = createBottomTabNavigator();
 
@@ -16,17 +19,26 @@ const tabData = [
     },
   },
   {
+    name: 'Track',
+    component: DeliveryTracking,
+    icons: {
+      inactive: 'map-outline',
+      active: 'map',
+    },
+  },
+  {
     name: 'Profile',
     component: VolunteerProfile,
     icons: {
-      inactive: 'home-outline',
-      active: 'home',
+      inactive: 'person-outline',
+      active: 'person',
     },
   },
 ];
 
 const VolunteerNavigator = () => {
   return (
+    <>
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
@@ -60,14 +72,48 @@ const VolunteerNavigator = () => {
               <Ionicons
                 name={focused ? tab.icons.active : tab.icons.inactive}
                 size={24}
-                color={focused ? '#2222aa' : '#6c757d'}
+                color={focused ? '#FC8019' : '#FC8019'}
               />
             ),
           }}
         />
       ))}
     </Tab.Navigator>
+    </>
   );
 };
+
+const Tile = ({ title, description }) => {
+  return (
+    <View style={styles.tileContainer}>
+      <Text style={styles.title}>{title}</Text>
+      <Text style={styles.description}>{description}</Text>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  tileContainer: {
+    padding: 16,
+    backgroundColor: 'transparent',
+    borderRadius: 10,
+    elevation: 3,
+    margin: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  description: {
+    fontSize: 14,
+    color: '#555',
+    marginTop: 5,
+  },
+});
 
 export default VolunteerNavigator;

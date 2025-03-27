@@ -21,16 +21,16 @@ const tabData = [
     name: 'Listing',
     component: BusinessListing,
     icons: {
-      inactive: 'home-outline',
-      active: 'home',
+      inactive: 'list-outline',
+      active: 'list',
     },
   },
   {
     name: 'Profile',
     component: BusinessProfile,
     icons: {
-      inactive: 'home-outline',
-      active: 'home',
+      inactive: 'person-outline',
+      active: 'person',
     },
   },
 ];
@@ -70,7 +70,7 @@ const BusinessNavigator = () => {
               <Ionicons
                 name={focused ? tab.icons.active : tab.icons.inactive}
                 size={24}
-                color={focused ? '#2222aa' : '#6c757d'}
+                color={focused ? '#FC8019' : '#FC8019'}
               />
             ),
           }}
