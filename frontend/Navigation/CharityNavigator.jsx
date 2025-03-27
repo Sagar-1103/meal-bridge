@@ -3,7 +3,8 @@ import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CharityProfile from '../Screens/charity/CharityProfile';
 import CharityListing from '../Screens/charity/CharityListing';
-
+import { View } from 'react-native';
+import OrderTracking from "../Screens/charity/OrderTracking";
 const Tab = createBottomTabNavigator();
 
 const tabData = [
@@ -16,17 +17,26 @@ const tabData = [
     },
   },
   {
+    name: 'Track Order',
+    component: OrderTracking,
+    icons: {
+      inactive: 'map-outline',
+      active: 'map',
+    },
+  },
+  {
     name: 'Profile',
     component: CharityProfile,
     icons: {
-      inactive: 'home-outline',
-      active: 'home',
+      inactive: 'person-outline',
+      active: 'person',
     },
   },
 ];
 
 const CharityNavigator = () => {
   return (
+    <>
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
@@ -60,14 +70,16 @@ const CharityNavigator = () => {
               <Ionicons
                 name={focused ? tab.icons.active : tab.icons.inactive}
                 size={24}
-                color={focused ? '#2222aa' : '#6c757d'}
+                color={focused ? '#FC8019' : '#FC8019'}
               />
             ),
           }}
         />
       ))}
     </Tab.Navigator>
+    </>
   );
 };
+
 
 export default CharityNavigator;

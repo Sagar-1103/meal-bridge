@@ -1,10 +1,14 @@
-import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React from 'react';
+import { View, Image, StyleSheet } from 'react-native';
+import Logo from "../assets/MealBridge.png";
 
-const SplashScreen = () => {
+const SplashScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
-            <Text>SplashScreen</Text>
+            <Image
+                source={Logo} 
+                style={styles.image}
+            />
         </View>
     );
 };
@@ -14,7 +18,12 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#2c3e50',
+        backgroundColor: '#fff',
+    },
+    image: {
+        width: 200,
+        height: 200,
+        resizeMode: 'contain',
     },
 });
 
