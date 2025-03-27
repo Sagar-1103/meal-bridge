@@ -6,7 +6,6 @@ import IconMC from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useAuth } from '../../context/AuthProvider';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 const { width, height } = Dimensions.get('window');
 
 const CharityProfile = () => {
@@ -38,15 +37,15 @@ const CharityProfile = () => {
     }
 
   const handleWebsitePress = () => {
-    Linking.openURL(charityData.contact.website);
+    Linking.openURL(user.contact.website);
   };
 
   const handleCallPress = () => {
-    Linking.openURL(`tel:${charityData.contact.phone}`);
+    Linking.openURL(`tel:${user.contact.phone}`);
   };
 
   const handleEmailPress = () => {
-    Linking.openURL(`mailto:${charityData.contact.email}`);
+    Linking.openURL(`mailto:${user.contact.email}`);
   };
 
   return (
@@ -64,7 +63,7 @@ const CharityProfile = () => {
             style={styles.charityLogo}
           />
         </View>
-        <Text style={styles.charityName}>{charityData.name}</Text>
+        <Text style={styles.charityName}>{user.name}</Text>
       </View>
 
       {/* Address Section */}
@@ -77,21 +76,21 @@ const CharityProfile = () => {
         <View style={styles.infoItem}>
           <Icon name="place" size={20} color="#FF6B00" style={styles.icon} />
           <Text style={styles.infoText}>
-            {charityData.address.street}, {charityData.address.city}
+            {user.address.street}, {user.address.city}
           </Text>
         </View>
         
         <View style={styles.infoItem}>
           <Icon name="map" size={20} color="#FF6B00" style={styles.icon} />
           <Text style={styles.infoText}>
-            {charityData.address.state}, {charityData.address.zipcode}
+            {user.address.state}, {user.address.zipcode}
           </Text>
         </View>
         
         <View style={styles.infoItem}>
           <Icon name="public" size={20} color="#FF6B00" style={styles.icon} />
           <Text style={styles.infoText}>
-            {charityData.address.country}
+            {user.address.country}
           </Text>
         </View>
       </View>
@@ -105,22 +104,22 @@ const CharityProfile = () => {
         
         <TouchableOpacity style={styles.infoItem} onPress={handleCallPress}>
           <Icon name="phone" size={20} color="#FF6B00" style={styles.icon} />
-          <Text style={styles.infoText}>{charityData.contact.phone}</Text>
+          <Text style={styles.infoText}>{user.contact.phone}</Text>
         </TouchableOpacity>
         
         <TouchableOpacity style={styles.infoItem} onPress={handleEmailPress}>
           <Icon name="email" size={20} color="#FF6B00" style={styles.icon} />
-          <Text style={styles.infoText}>{charityData.contact.email}</Text>
+          <Text style={styles.infoText}>{user.contact.email}</Text>
         </TouchableOpacity>
         
         <TouchableOpacity style={styles.infoItem} onPress={handleWebsitePress}>
           <IconFA name="globe" size={20} color="#FF6B00" style={styles.icon} />
-          <Text style={[styles.infoText, styles.linkText]}>{charityData.contact.website}</Text>
+          <Text style={[styles.infoText, styles.linkText]}>{user.contact.website}</Text>
         </TouchableOpacity>
       </View>
 
       {/* Certifications Section */}
-      <View style={styles.section}>
+      {user.certifications && <View style={styles.section}>
         <View style={styles.sectionHeader}>
           <Icon name="verified" size={24} color="#FF6B00" />
           <Text style={styles.sectionTitle}>Certifications</Text>
@@ -128,21 +127,21 @@ const CharityProfile = () => {
         
         <View style={styles.infoItem}>
           <Icon name="assignment" size={20} color="#FF6B00" style={styles.icon} />
-          <Text style={styles.infoText}>Registration: {charityData.registrationNumber}</Text>
+          <Text style={styles.infoText}>Registration: {user.registrationNumber}</Text>
         </View>
         
         <View style={styles.certificationsContainer}>
-          {charityData.certifications.map((cert, index) => (
+          {user.certifications.map((cert, index) => (
             <View key={index} style={styles.certificationBadge}>
               <Icon name="verified-user" size={18} color="#FF6B00" />
               <Text style={styles.certificationText}>{cert}</Text>
             </View>
           ))}
         </View>
-      </View>
+      </View>}
 
       {/* Action Buttons */}
-      <View style={styles.actionButtons}>
+      {/* <View style={styles.actionButtons}>
         <TouchableOpacity style={[styles.button, styles.primaryButton]}>
           <Icon name="volunteer-activism" size={22} color="white" />
           <Text style={styles.buttonText}>Donate Now</Text>
@@ -152,7 +151,7 @@ const CharityProfile = () => {
           <Icon name="share" size={22} color="#FF6B00" />
           <Text style={[styles.buttonText, styles.secondaryButtonText]}>Share</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
             <Ionicons name="log-out-outline" size={width * 0.05} color="#FF3B30" />
         </TouchableOpacity>

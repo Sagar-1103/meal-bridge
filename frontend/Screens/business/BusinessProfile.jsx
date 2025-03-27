@@ -131,18 +131,6 @@ const BusinessProfile = () => {
         </View>
       </View>
 
-      {/* Larger Action Buttons */}
-      <View style={styles.actionButtons}>
-        <TouchableOpacity style={[styles.button, styles.primaryButton]}>
-          <Icon name="edit" size={width*0.05} color="white" />
-          <Text style={styles.buttonText}>Edit Profile</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity style={[styles.button, styles.secondaryButton]}>
-          <Icon name="share" size={width*0.05} color="#FF6B00" />
-          <Text style={[styles.buttonText, styles.secondaryButtonText]}>Share</Text>
-        </TouchableOpacity>
-      </View>
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
       <Ionicons name="log-out-outline" size={width * 0.05} color="#FF3B30" />
         </TouchableOpacity>
@@ -151,7 +139,6 @@ const BusinessProfile = () => {
 };
 
 const styles = StyleSheet.create({
-
       logoutButton: {
         backgroundColor: "#FFF",
         borderWidth: 1,
