@@ -2,19 +2,16 @@ import React from 'react';
 import {LogBox} from 'react-native';
 LogBox.ignoreLogs(['new NativeEventEmitter']);
 import {NavigationContainer} from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Home from './components/Home';
-import Map from './testScreens/Map';
-import Camera from './testScreens/Camera';
+import AppNavigator from './Navigation/AppNavigation';
+import AuthProvider from './context/AuthProvider';
 
-const Stack = createNativeStackNavigator();
 const App = () => {
   return (
+    <AuthProvider>
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Home" component={Camera} />
-      </Stack.Navigator>
+        <AppNavigator/>
     </NavigationContainer>
+    </AuthProvider>
   );
 };
 
