@@ -56,13 +56,14 @@ export const charitylist = AsyncHandler(async (req, res) => {
                 distanceField: "distance",
                 key: "businesslocation",
                 spherical: true,
+                maxDistance: 5000,
             },
         },
         { $sort: { distance: -1 } } // Sorting in decreasing order
     ]);
-    console.log(nearbyBusinesses)
+    // console.log(nearbyBusinesses)
     const businessIDs = nearbyBusinesses.map((b) => b.businessID);
-    console.log(businessIDs)
+    // console.log(businessIDs)
 
     // Applying filters
     const filters = { businessID: { $in: businessIDs } };
@@ -94,10 +95,23 @@ export const businesslist = AsyncHandler(async (req, res) => {
         return res.status(404).json({ message: "Business location not found" });
     }
 
+    res.status(200).json({ success: true, data: list });
+});
 
+
+export const volunteerlist = AsyncHandler(async (req, res) => {
+
+    // Get business details with only pending status items
+    const list = await listitemModel.find({ "foodDetails.status": "in_progress" });
+
+    if (!list || list.length === 0) {
+        return res.status(404).json({ message: "No in_progress items found for this business" });
+    }
 
     res.status(200).json({ success: true, data: list });
 });
+
+
 
 
 

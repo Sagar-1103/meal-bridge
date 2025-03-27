@@ -5,6 +5,7 @@ import {ApiResponse} from "./utils/ApiResponse.js";
 import userRouter from "./routes/user.route.js";
 import profileRoutes from './routes/user.route.js'
 import listRoutes from './routes/list.route.js'
+import statusRoutes from './routes/status.route.js'
 
 const app = express();
 
@@ -25,5 +26,6 @@ app.get("/",(req,res)=>{
 
 app.use('/list',listRoutes)
 app.use("/users",profileRoutes);
+app.use('/status',statusRoutes)
 
 export {app}
