@@ -5,22 +5,59 @@ import bcrypt from 'bcryptjs'
 import volunteerProfileModel from "../models/volunteerProfile.model.js";
 import jwt from 'jsonwebtoken'
 import listitemModel from "../models/listitem.model.js";
+import { v2 as cloudinary } from "cloudinary";
+
+// const getairesponse=async(img_url)=>{
+//     const genAI = new GoogleGenerativeAI(process.env.GEMINI_URL);
+
+//     const model = genAI.getGenerativeModel({ model: 'models/gemini-1.5-pro' });
+    
+//     const imageResp = await fetch(
+//        img_url
+//     )
+//         .then((response) => response.arrayBuffer());
+    
+//     const result = await model.generateContent([
+//         {
+//             inlineData: {
+//                 data: Buffer.from(imageResp).toString("base64"),
+//                 mimeType: "image/jpeg",
+//             },
+//         },
+//         "Analyze the given food image and assess its quality based on visual characteristics such as freshness, texture, color, and overall appearance. Identify any visible signs of spoilage, inconsistency, or degradation. Additionally, provide a quality score out of 10 based on the following parameters: freshness (0-10), texture (0-10), color (0-10). Summarize the evaluation in a short, meaningful response.",
+//     ]);
+//     const response=result.response.text()
+//     res.json({ai_img_reponse:response})
+// }
+
+const uploadToCloudinary = async (base64) => {
+    const response = await cloudinary.uploader.upload(`data:image/png;base64,${base64}`, {
+        folder: "speed_dials",
+    });
+    return response.secure_url;
+};
 
 export const createlist = AsyncHandler(async(req,res)=>{
-    const { businessID, foodDetails, charityID, volunteerID, edible } = req.body;
+    const { businessID, foodDetails, charityID, volunteerID, image_base_64 } = req.body;
 
     // Validate required fields
     if (!businessID || !foodDetails || !foodDetails.name || !foodDetails.category || !foodDetails.weight) {
       return res.status(400).json({ message: "Missing required fields" });
     }
-  
+
+    const base64Image1 = image_base_64.toString('base64');
+
+    const imageURL = await uploadToCloudinary(base64Image1);
+
     // Create new ListItem
     const listItem = new listitemModel({
       businessID,
       foodDetails,
       charityID,
       volunteerID,
-      edible,
+      edible:{
+        imageURL:imageURL,
+      },
     });
   
     // Save to DB
