@@ -150,7 +150,14 @@ export const businesslist = AsyncHandler(async (req, res) => {
 export const volunteerlist = AsyncHandler(async (req, res) => {
 
     // Get business details with only pending status items
-    const list = await listitemModel.find({ "foodDetails.status": "in_progress" });
+    const list = await listitemModel.find({
+        $or: [
+            { "foodDetails.status": "in_progress" },
+            { "foodDetails.status": "pickup" },
+            { "foodDetails.status": "delivered" }
+        ]
+    });
+    
 
     if (!list || list.length === 0) {
         return res.status(404).json({ message: "No in_progress items found for this business" });

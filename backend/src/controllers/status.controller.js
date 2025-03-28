@@ -116,4 +116,31 @@ export const updateFoodStatus_to_picked_up = AsyncHandler(async (req, res) => {
     }
 });
 
+export const updateFoodStatus_to_delivered=AsyncHandler(async(req,res)=>{
+    const {listID,charityID}=req.body;
+
+    if (!listID) {
+        return res.status(400).json({ message: "listID is required" });
+    }
+
+    if (!charityID) {
+        return res.status(400).json({ message: "charityID is required" });
+    }
+
+
+    const updatedItem = await listitemModel.findOneAndUpdate(
+        { charityID: charityID },
+        { $set: { "foodDetails.status": 'delivered' } },
+        { new: true } // Returns the updated document
+    );
+
+    if (!updatedItem) {
+        return res.status(404).json({ message: "List item not found" });
+    }
+
+    res.status(200).json({ success: true, data: updatedItem });
+
+})
+
+
 
