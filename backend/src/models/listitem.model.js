@@ -1,5 +1,4 @@
  import mongoose from "mongoose";
-import type from "mongoose/lib/schema/operators/type";
 
 const listItemSchema = new mongoose.Schema({
     listID: {
