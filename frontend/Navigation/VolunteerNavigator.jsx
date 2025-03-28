@@ -6,6 +6,7 @@ import VolunteerDeliveries from '../Screens/volunteer/VolunteerDeliveries';
 import { StyleSheet, Text, View } from 'react-native';
 import OrderTracking from "../Screens/charity/OrderTracking";
 import DeliveryTracking from '../Screens/charity/OrderTracking';
+import VolunteerDeliveryTracking from '../Screens/volunteer/VolunteerOrderTracking';
 
 const Tab = createBottomTabNavigator();
 
@@ -20,7 +21,7 @@ const tabData = [
   },
   {
     name: 'Track',
-    component: DeliveryTracking,
+    component: VolunteerDeliveryTracking,
     icons: {
       inactive: 'map-outline',
       active: 'map',

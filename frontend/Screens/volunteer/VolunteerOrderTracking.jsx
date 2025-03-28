@@ -3,15 +3,13 @@ import { View, Text, StyleSheet, TouchableOpacity, Linking } from 'react-native'
 import Mapbox, { MapView, Camera, PointAnnotation, ShapeSource, LineLayer } from '@rnmapbox/maps';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import axios from 'axios';
-import { useNavigation } from '@react-navigation/native';
 
 Mapbox.setAccessToken('pk.eyJ1IjoiY29kZXNlZWtlcnMiLCJhIjoiY2x1ZmRidHkzMGtxMjJrcm84Nm93azFydyJ9.4PcFMmvYRH31QSZmtU1cXA');
 
 const pickupCoords = [73.979598, 15.424639];
 const dropoffCoords = [73.979598, 15.424639];
 
-const CharityOrderTracking = () => {
-    const navigation = useNavigation();
+const VolunteerDeliveryTracking = () => {
     const [route, setRoute] = useState(null);
 
     const getRoute = async () => {
@@ -27,19 +25,14 @@ const CharityOrderTracking = () => {
         }
     };
 
-
-    const callRider = () => {
-        const phoneNumber = 'tel:+7498520221'; // Replace with the actual rider's number
-        Linking.openURL(phoneNumber).catch(err => console.error('Failed to make call:', err));
-    };
+        const callCharity = () => {
+            const phoneNumber = 'tel:+7498520221'; // Replace with the actual rider's number
+            Linking.openURL(phoneNumber).catch(err => console.error('Failed to make call:', err));
+        };
+    
 
     return (
         <View style={styles.container}>
-            {/* Back Button */}
-            <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-                <Ionicons name="arrow-back" size={24} color="black" />
-            </TouchableOpacity>
-
             {/* Map Section */}
             <View style={styles.mapContainer}>
                 <MapView
@@ -52,9 +45,9 @@ const CharityOrderTracking = () => {
                     logoEnabled={false}
                 >
                     <Camera zoomLevel={14} centerCoordinate={pickupCoords} />
-                                      <PointAnnotation id="pickup" coordinate={pickupCoords}>
-                      <Ionicons name="bicycle" size={30} color="#FC8019" />
-                  </PointAnnotation>
+                    <PointAnnotation id="pickup" coordinate={pickupCoords}>
+    <Ionicons name="bicycle" size={30} color="#FC8019" />
+</PointAnnotation>
                     <PointAnnotation id="dropoff" coordinate={dropoffCoords} />
 
                     {route && (
@@ -74,8 +67,7 @@ const CharityOrderTracking = () => {
 
             {/* Order Status */}
             <View style={styles.detailsContainer}>
-                <Text style={styles.status}>🚴‍♂️ On the way </Text>
-
+                <Text style={styles.status}>🚴‍♂️ On the way</Text>
                 {/* Pickup & Drop-off Locations */}
                 <View style={styles.locationContainer}>
                     <View style={styles.locationItem}>
@@ -90,9 +82,13 @@ const CharityOrderTracking = () => {
 
                 {/* Action Buttons */}
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity onPress={callRider} style={[styles.button, styles.callButton]}>
+                    <TouchableOpacity onPress={callCharity} style={[styles.button, styles.callButton]}>
                         <Ionicons name="call" size={20} color="#fff" />
-                        <Text style={styles.buttonText}>Call Rider</Text>
+                        <Text style={styles.buttonText}>Call Customer</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={getRoute} style={[styles.button, styles.navigateButton]}>
+                        <Ionicons name="navigate" size={20} color="#fff" />
+                        <Text style={styles.buttonText}>Navigate</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -104,16 +100,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#f9f9f9',
-    },
-    backButton: {
-        position: 'absolute',
-        top: 50,
-        left: 20,
-        zIndex: 10,
-        backgroundColor: 'rgba(255,255,255,0.8)',
-        padding: 10,
-        borderRadius: 20,
-        elevation: 4,
     },
     mapContainer: {
         height: "56%",
@@ -194,4 +180,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default CharityOrderTracking;
+export default VolunteerDeliveryTracking;

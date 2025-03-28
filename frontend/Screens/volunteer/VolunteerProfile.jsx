@@ -25,42 +25,16 @@ const VolunteerProfile = () => {
     setToken(null);
     setUser(null);
   };
-  const volunteerData = {
-    name: 'Sagar',
-    contact: {
-      phone: '+91 9996543210',
-      email: 'sagar@gmail.com',
-    },
-    verifiedStatus: 'verified',
-    identityVerification: {
-      govtIDType: 'Aadhar',
-      govtIDNumber: '1234-5678-1234',
-    },
-    vehicle: {
-      type: 'Bike',
-      registrationNumber: 'KA-05-AB-1214',
-      capacity: 25,
-    },
-    experienceLevel: 'Intermediate',
-    availability: {
-      days: ['Monday', 'Wednesday', 'Friday', 'Saturday'],
-      timeSlots: [
-        {start: '09:00', end: '12:00'},
-        {start: '16:00', end: '19:00'},
-      ],
-    },
-  };
-
   const handleCallPress = () => {
-    Linking.openURL(`tel:${volunteerData.contact.phone}`);
+    Linking.openURL(`tel:${user.contact.phone}`);
   };
 
   const handleEmailPress = () => {
-    Linking.openURL(`mailto:${volunteerData.contact.email}`);
+    Linking.openURL(`mailto:${user.contact.email}`);
   };
 
   const renderAvailabilityDays = () => {
-    return volunteerData.availability.days.map((day, index) => (
+    return user.availability.days.map((day, index) => (
       <View key={index} style={styles.dayBadge}>
         <Text style={styles.dayText}>{day.substring(0, 3)}</Text>
       </View>
@@ -68,7 +42,7 @@ const VolunteerProfile = () => {
   };
 
   const renderTimeSlots = () => {
-    return volunteerData.availability.timeSlots.map((slot, index) => (
+    return user.availability.timeSlots.map((slot, index) => (
       <View key={index} style={styles.timeSlot}>
         <Icon name="access-time" size={18} color="#FF6B00" />
         <Text style={styles.timeText}>
@@ -89,7 +63,7 @@ const VolunteerProfile = () => {
           />
         </View>
         <View style={styles.nameContainer}>
-          <Text style={styles.volunteerName}>{volunteerData.name}</Text>
+          <Text style={styles.volunteerName}>{user.name}</Text>
           <View style={styles.statusBadge}>
             <Icon name="check-circle" size={16} color="#FF6B00" />
             <Text style={styles.statusText}>VERIFIED</Text>
@@ -107,14 +81,14 @@ const VolunteerProfile = () => {
         <View style={styles.infoItem}>
           <Icon name="phone" size={20} color="#FF6B00" style={styles.icon} />
           <TouchableOpacity onPress={handleCallPress}>
-            <Text style={styles.infoText}>{volunteerData.contact.phone}</Text>
+            <Text style={styles.infoText}>{user.contact.phone}</Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.infoItem}>
           <Icon name="email" size={20} color="#FF6B00" style={styles.icon} />
           <TouchableOpacity onPress={handleEmailPress}>
-            <Text style={styles.infoText}>{volunteerData.contact.email}</Text>
+            <Text style={styles.infoText}>{user.contact.email}</Text>
           </TouchableOpacity>
         </View>
 
@@ -126,8 +100,8 @@ const VolunteerProfile = () => {
             style={styles.icon}
           />
           <Text style={styles.infoText}>
-            {volunteerData.identityVerification.govtIDType}:{' '}
-            {volunteerData.identityVerification.govtIDNumber}
+            {user.identityVerification.govtIDType}:{' '}
+            {user.identityVerification.govtIDNumber}
           </Text>
         </View>
       </View>
@@ -142,24 +116,24 @@ const VolunteerProfile = () => {
         <View style={styles.vehicleInfo}>
           <View style={styles.vehicleBadge}>
             <IconMC
-              name={volunteerData.vehicle.type.toLowerCase()}
+              name={user.vehicle.type.toLowerCase()}
               size={28}
               color="#FF6B00"
             />
-            <Text style={styles.vehicleType}>{volunteerData.vehicle.type}</Text>
+            <Text style={styles.vehicleType}>{user.vehicle.type}</Text>
           </View>
 
           <View style={styles.vehicleDetail}>
             <Icon name="confirmation-number" size={20} color="#FF6B00" />
             <Text style={styles.vehicleText}>
-              {volunteerData.vehicle.registrationNumber}
+              {user.vehicle.registrationNumber}
             </Text>
           </View>
 
           <View style={styles.vehicleDetail}>
             <Icon name="inventory" size={20} color="#FF6B00" />
             <Text style={styles.vehicleText}>
-              Capacity: {volunteerData.vehicle.capacity} kg
+              Capacity: {user.vehicle.capacity} kg
             </Text>
           </View>
         </View>
@@ -175,7 +149,7 @@ const VolunteerProfile = () => {
         <View style={styles.experienceBadge}>
           <Icon name="star" size={18} color="#FF6B00" />
           <Text style={styles.experienceText}>
-            {volunteerData.experienceLevel} Volunteer
+            {user.experienceLevel} Volunteer
           </Text>
         </View>
 
@@ -187,19 +161,7 @@ const VolunteerProfile = () => {
       </View>
 
       {/* Action Buttons */}
-      <View style={styles.actionButtons}>
-        <TouchableOpacity style={[styles.button, styles.primaryButton]}>
-          <Icon name="edit" size={22} color="white" />
-          <Text style={styles.buttonText}>Edit Profile</Text>
-        </TouchableOpacity>
 
-        <TouchableOpacity style={[styles.button, styles.secondaryButton]}>
-          <Icon name="notifications" size={22} color="#FF6B00" />
-          <Text style={[styles.buttonText, styles.secondaryButtonText]}>
-            Notifications
-          </Text>
-        </TouchableOpacity>
-      </View>
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
         <Ionicons name="log-out-outline" size={width * 0.05} color="#FF3B30" />
       </TouchableOpacity>

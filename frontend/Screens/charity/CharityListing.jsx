@@ -19,12 +19,27 @@ import {useAuth} from "../../context/AuthProvider";
 import { useFocusEffect } from '@react-navigation/native';
 import { BACKEND_URL } from '../../constants/Environments';
 import axios from 'axios';
+import DeliveredModal from './DeliveredModal';
 
 const { width, height } = Dimensions.get('window');
 
 // Food Card Component
-const FoodCard = ({ foodItem }) => {
+const FoodCard = ({ foodItem,navigation,setModalVisible,setPopId }) => {
   const scaleAnim = useRef(new Animated.Value(1)).current;
+  const {user} = useAuth();
+
+  const changeStatus = async(listID)=>{
+    try {
+      const url = `${BACKEND_URL}/status/in-progress`;
+      console.log(listID,user.charityID);
+      
+      const response = await axios.patch(url,{listID, charityID:user.charityID });
+      const res = await response.data;
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const handlePressIn = () => {
     Animated.spring(scaleAnim, {
@@ -102,6 +117,11 @@ const FoodCard = ({ foodItem }) => {
               <Icon name="scale" size={18} color="#FF6B00" />
               <Text style={styles.detailText}>{foodItem.foodDetails.weight} kg</Text>
             </View>
+
+            <View style={styles.detailItem}>
+              <Icon name="circle" size={18} color="#FF6B00" />
+              <Text style={styles.detailText}>{foodItem.foodDetails.status.charAt(0).toUpperCase() + foodItem.foodDetails.status.slice(1)}</Text>
+            </View>
             
             <View style={styles.detailItem}>
               <Icon name="access-time" size={18} color="#FF6B00" />
@@ -109,9 +129,12 @@ const FoodCard = ({ foodItem }) => {
             </View>
           </View>
           
-          <TouchableOpacity style={styles.actionButton}>
-            <Text style={styles.buttonText}>Accept Donation</Text>
-            <Icon name="chevron-right" size={20} color="white" />
+          <TouchableOpacity onPress={foodItem.foodDetails.status==="pickup"?()=>{setModalVisible(true),setPopId(foodItem.listID)}:foodItem.foodDetails.status==="in_progress"?()=>{navigation.navigate("CharityOrderTracking")}:foodItem.foodDetails.status==="pending"?()=>changeStatus(foodItem.listID):()=>{}}   style={[
+    styles.actionButton, 
+    foodItem.foodDetails.status === "delivered" && { backgroundColor: "gray" }
+  ]}>
+            <Text style={styles.buttonText}>{foodItem.foodDetails.status==="pickup"?"Has it been delivered":foodItem.foodDetails.status==="delivered"?"Delivered":foodItem.foodDetails.status==="in_progress"?"Delivering":foodItem.foodDetails.status==="pending"?"Accept Donation":"Delivering"}</Text>
+            {!(foodItem.foodDetails.status==="delivered") && <Icon  name="chevron-right" size={20} color="white" />}
           </TouchableOpacity>
         </View>
       </TouchableOpacity>
@@ -119,13 +142,15 @@ const FoodCard = ({ foodItem }) => {
   );
 };
 
-const CharityListing = () => {
-    const {user} = useAuth();
+const CharityListing = ({navigation}) => {
   useFocusEffect(
       useCallback(() => {
           getLists();
       }, [])
   );
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [popId, setPopId] = useState(false);
 
   const [lists,setLists] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -150,8 +175,11 @@ const CharityListing = () => {
     }
   }
 
+
+
   return (
     <View style={styles.container}>
+      <DeliveredModal listID={popId} visible={modalVisible} onClose={() => setModalVisible(false)} />
       {/* Orange Gradient Header */}
       <LinearGradient
         colors={['#FF6B00', '#FF8E00']}
@@ -176,7 +204,7 @@ const CharityListing = () => {
       contentContainerStyle={styles.scrollContent}
       style={styles.scrollContainer}
       keyExtractor={(item) => item._id}
-      renderItem={({ item }) => <FoodCard key={item._id} foodItem={item} />}
+      renderItem={({ item }) => <FoodCard setPopId={setPopId} setModalVisible={setModalVisible} navigation={navigation} key={item._id} foodItem={item} />}
       showsVerticalScrollIndicator={false}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

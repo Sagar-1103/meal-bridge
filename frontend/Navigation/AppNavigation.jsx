@@ -15,7 +15,10 @@ import RoleSelector from "../Screens/RoleSelector";
 import OrderTracking from "../Screens/charity/OrderTracking";
 import BusinessDashboard from "../Screens/business/BusinessDashboard";
 import UploadList from "../Screens/business/UploadList";
-
+import DeliveryCheckScreen from "../Screens/volunteer/DeliveryCheckScreen";
+import Map from "../testScreens/Map";
+import VolunteerDeliveryTracking from "../Screens/volunteer/VolunteerOrderTracking";
+import CharityOrderTracking from "../Screens/charity/CharityOrderTracking";
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = () => {
@@ -26,7 +29,7 @@ const AppNavigator = () => {
         storageAccess();
         setTimeout(()=>{
             setLoading(false);
-        },1000);
+        },2000);
     },[])
 
     const storageAccess = async()=>{
@@ -69,6 +72,9 @@ const AppNavigator = () => {
         return (
         <Stack.Navigator screenOptions={{headerShown:false}} initialRouteName="VolunteerNavigator"  >
             <Stack.Screen name="VolunteerNavigator" component={VolunteerNavigator}/>
+            <Stack.Screen name="DeliveryCheckScreen" component={DeliveryCheckScreen}/>
+            <Stack.Screen name="VolunteerDeliveryTracking" component={VolunteerDeliveryTracking}/>
+            <Stack.Screen name="Map" component={Map}/>
         </Stack.Navigator>
         );
     }
@@ -77,6 +83,7 @@ const AppNavigator = () => {
         <Stack.Navigator screenOptions={{headerShown:false}} initialRouteName="CharityNavigator"  >
             <Stack.Screen name="CharityNavigator" component={CharityNavigator}/>
             <Stack.Screen name="OrderTracking" component={OrderTracking}/>
+            <Stack.Screen name="CharityOrderTracking" component={CharityOrderTracking}/>
         </Stack.Navigator>
         );
     }

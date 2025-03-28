@@ -60,13 +60,10 @@ const BusinessListing = () => {
             </View>
             {expandedItem === item?._id && (
                 <View style={styles.expandedContent}>
-                    <Text style={styles.description}>{item?.foodDetails?.description}</Text>
+                    <Text style={styles.description}>{item?.edible?.description}</Text>
                     <Text style={styles.detail}>Category: {item?.foodDetails?.category?.join(', ')}</Text>
                     <Text style={styles.detail}>Prepared Time: {item?.foodDetails?.preparedTime} min</Text>
                     <Text style={styles.detail}>Status: <Text style={styles.status}>{item?.foodDetails?.status}</Text></Text>
-                    <Text style={styles.detail}>Quality: <Text style={styles.quality}>{item?.edible?.quality} ({item?.edible?.freshness})</Text></Text>
-                    <Text style={styles.detail}>Overall Score: <Text style={styles.score}>{item?.edible?.overallScore}/10</Text></Text>
-                    <Text style={styles.detail}>List ID: {item?.listID}</Text>
                     {item.charityID && <Text style={styles.detail}>Charity ID: {item?.charityID}</Text>}
                     {item.volunteerID && <Text style={styles.detail}>Volunteer ID: {item?.volunteerID}</Text>}
                 </View>

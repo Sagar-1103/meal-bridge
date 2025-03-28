@@ -31,7 +31,7 @@ const FoodUploadScreen = ({navigation}) => {
   
   
   const handleImageUpload = () => {
-    ImagePicker.openPicker({
+    ImagePicker.openCamera({
       width: 300,   // Resize width
       height: 400,  // Resize height
       cropping: true,
@@ -92,7 +92,7 @@ const FoodUploadScreen = ({navigation}) => {
       return navigation.goBack();
     } catch (error) {
       Alert.alert('Error', 'Some error occured');
-      console.log(JSON.s(error));
+      console.log(error);
     }
   };
 

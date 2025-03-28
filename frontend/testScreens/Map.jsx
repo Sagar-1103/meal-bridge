@@ -1,22 +1,27 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import Mapbox, { MapView, Camera, PointAnnotation } from '@rnmapbox/maps';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 Mapbox.setAccessToken('pk.eyJ1IjoiY29kZXNlZWtlcnMiLCJhIjoiY2x1ZmRidHkzMGtxMjJrcm84Nm93azFydyJ9.4PcFMmvYRH31QSZmtU1cXA');
 
-const Map = () => {
+const Map = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <MapView style={styles.map} >
-        <Camera
-          zoomLevel={10}
-          centerCoordinate={[15,75]}
-        />
-        <PointAnnotation
-          id="pin"
-          coordinate={[15,75]}
-        >
-        </PointAnnotation>
+      {/* Back Button */}
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Ionicons name="arrow-back" size={24} color="white" />
+      </TouchableOpacity>
+      
+      {/* Map View */}
+      <MapView style={styles.map}>
+        <Camera zoomLevel={20} centerCoordinate={[73.979598, 15.424639]} />
+        <PointAnnotation id="pin" coordinate={[73.979598, 15.424639]} />
+        <PointAnnotation id="pickup" coordinate={[73.979598, 15.424639]}>
+    <Ionicons name="bicycle" size={30} color="#FC8019" />
+</PointAnnotation>
       </MapView>
+
     </View>
   );
 };
@@ -24,79 +29,35 @@ const Map = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: '#f5f5f5',
   },
   map: {
     flex: 1,
     width: '100%',
   },
-  NavigateButton: {
-    position: 'absolute', 
-    bottom: '4%',
-    backgroundColor: 'rgb(233,108,56)',
-    paddingVertical:'5%',
-    borderRadius: 32,
+  backButton: {
+    position: 'absolute',
+    top: 40,
+    left: 20,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    padding: 10,
+    borderRadius: 50,
     zIndex: 999,
-    justifyContent: 'center',
-    width: '70%',
   },
-  modalView: {
-    marginTop: 'auto',
-    backgroundColor: 'white',
-    borderRadius: 10,
-    padding: 20,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
+  navigateButton: {
+    position: 'absolute', 
+    bottom: 40,
+    alignSelf: 'center',
+    backgroundColor: '#E96C38',
+    paddingVertical: 14,
+    paddingHorizontal: 32,
+    borderRadius: 25,
     elevation: 5,
   },
-  modalText: {
-    marginBottom: 20,
-    fontSize: 18,
-    color: 'black',
-  },
-  input: {
-    width: '80%',
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    borderRadius: 5,
-    marginBottom: 10,
-    paddingHorizontal: 10,
-    color: 'gray',
-  },
-  settingsButton: {
-    position: 'absolute',
-    paddingVertical:'8%',
-    zIndex: 998,
-    justifyContent: 'center',
-    width: '25%',
-    borderRadius: 7,
-    right: '2%',
-  },
-  settingsText: {
-    color: 'white',
-    fontSize: 14,
-    textAlign: 'center',
-  },
-
-  centerButton: {
-    backgroundColor: 'rgb(0, 92, 23)',
-    top: '5%'
-  },
-  radiusButton: {
-    backgroundColor: 'rgb(0, 87, 158)',
-    top: '11%'
-  },
-  NavigateButtonText: {
+  navigateButtonText: {
     color: 'white',
     fontSize: 16,
+    fontWeight: 'bold',
     textAlign: 'center',
   },
 });
