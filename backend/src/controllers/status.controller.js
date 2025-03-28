@@ -129,7 +129,7 @@ export const updateFoodStatus_to_delivered=AsyncHandler(async(req,res)=>{
 
 
     const updatedItem = await listitemModel.findOneAndUpdate(
-        { charityID: charityID },
+        { listID: listID },
         { $set: { "foodDetails.status": 'delivered' } },
         { new: true } // Returns the updated document
     );
