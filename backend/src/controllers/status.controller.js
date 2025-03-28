@@ -90,7 +90,7 @@ export const updateFoodStatus_to_picked_up = AsyncHandler(async (req, res) => {
         }
 
         // Add imageURL to checklist
-        checklist.deliveryImageURL = imageURL;
+        checklist.deliveryimage_URL = imageURL;
 
         // Update food status, checklist, and image URL
         const updatedItem = await listitemModel.findOneAndUpdate(
