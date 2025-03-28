@@ -94,10 +94,10 @@ export const updateFoodStatus_to_picked_up = AsyncHandler(async (req, res) => {
 
         // Update food status, checklist, and image URL
         const updatedItem = await listitemModel.findOneAndUpdate(
-            { _id: listID }, // Ensure you're using `_id` for MongoDB
+            { listID: listID }, // Ensure you're using `_id` for MongoDB
             { 
                 $set: { 
-                    "foodDetails.status": "picked_up",
+                    "foodDetails.status": "pickup",
                     "foodDetails.checklist": checklist 
                 } 
             },
