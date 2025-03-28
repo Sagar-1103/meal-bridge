@@ -98,7 +98,7 @@ export const updateFoodStatus_to_picked_up = AsyncHandler(async (req, res) => {
             { 
                 $set: { 
                     "foodDetails.status": "pickup",
-                    "foodDetails.checklist": checklist 
+                    "checklist": checklist 
                 } 
             },
             { new: true } // Returns the updated document
