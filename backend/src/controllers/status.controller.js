@@ -73,7 +73,7 @@ export const updateFoodStatus_to_picked_up = AsyncHandler(async (req, res) => {
         return res.status(400).json({ message: "listID is required" });
     }
 
-    if (!checklist || typeof checklist !== "object" || !checklist.checked) {
+    if (!checklist || typeof checklist !== "object") {
         return res.status(400).json({ message: "Invalid checklist format" });
     }
 
@@ -98,7 +98,7 @@ export const updateFoodStatus_to_picked_up = AsyncHandler(async (req, res) => {
             { 
                 $set: { 
                     "foodDetails.status": "pickup",
-                    "foodDetails.checklist": checklist 
+                    "checklist": checklist 
                 } 
             },
             { new: true } // Returns the updated document
@@ -115,5 +115,32 @@ export const updateFoodStatus_to_picked_up = AsyncHandler(async (req, res) => {
         res.status(500).json({ message: "Internal Server Error", error });
     }
 });
+
+export const updateFoodStatus_to_delivered=AsyncHandler(async(req,res)=>{
+    const {listID,charityID}=req.body;
+
+    if (!listID) {
+        return res.status(400).json({ message: "listID is required" });
+    }
+
+    if (!charityID) {
+        return res.status(400).json({ message: "charityID is required" });
+    }
+
+
+    const updatedItem = await listitemModel.findOneAndUpdate(
+        { listID: listID },
+        { $set: { "foodDetails.status": 'delivered' } },
+        { new: true } // Returns the updated document
+    );
+
+    if (!updatedItem) {
+        return res.status(404).json({ message: "List item not found" });
+    }
+
+    res.status(200).json({ success: true, data: updatedItem });
+
+})
+
 
 

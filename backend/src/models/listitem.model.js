@@ -34,7 +34,7 @@ const listItemSchema = new mongoose.Schema({
       },
       status: {
         type: String,
-        enum: ["pending", "in_progress", "delivered", "pickup"],
+        enum: ["pending", "in_progress", "delivered", "pickup","failed"],
         default: "pending",
       },
     },
