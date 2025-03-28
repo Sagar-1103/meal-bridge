@@ -73,7 +73,7 @@ export const updateFoodStatus_to_picked_up = AsyncHandler(async (req, res) => {
         return res.status(400).json({ message: "listID is required" });
     }
 
-    if (!checklist || typeof checklist !== "object" || !checklist.checked) {
+    if (!checklist || typeof checklist !== "object") {
         return res.status(400).json({ message: "Invalid checklist format" });
     }
 
