@@ -1,5 +1,13 @@
 import listitemModel from "../models/listitem.model.js";
 import { AsyncHandler } from "../utils/AsyncHandler.js";
+import { v2 as cloudinary } from "cloudinary";
+
+const uploadToCloudinary = async (base64) => {
+    const response = await cloudinary.uploader.upload(`data:image/png;base64,${base64}`, {
+        folder: "speed_dials",
+    });
+    return response.secure_url;
+};
 
 export const updateFoodStatus_to_in_progress = AsyncHandler(async (req, res) => {
     const { listID, charityID } = req.body; // Get both listID and charityID from request body
@@ -59,7 +67,7 @@ export const updateVolunteer_to_listing=AsyncHandler(async(req,res)=>{
 
 
 export const updateFoodStatus_to_picked_up = AsyncHandler(async (req, res) => {
-    const { listID, checklist } = req.body;
+    const { listID, checklist, image_base_64 } = req.body;
 
     if (!listID) {
         return res.status(400).json({ message: "listID is required" });
@@ -69,10 +77,24 @@ export const updateFoodStatus_to_picked_up = AsyncHandler(async (req, res) => {
         return res.status(400).json({ message: "Invalid checklist format" });
     }
 
+    if (!image_base_64) {
+        return res.status(400).json({ message: "Image base64 is required" });
+    }
+
     try {
-        // Update food status and set the checklist
+        const base64Image1 = image_base_64.toString('base64');
+        const imageURL = await uploadToCloudinary(base64Image1);
+
+        if (!imageURL) {
+            return res.status(500).json({ message: "Image upload failed" });
+        }
+
+        // Add imageURL to checklist
+        checklist.deliveryImageURL = imageURL;
+
+        // Update food status, checklist, and image URL
         const updatedItem = await listitemModel.findOneAndUpdate(
-            { listID: listID }, 
+            { _id: listID }, // Ensure you're using `_id` for MongoDB
             { 
                 $set: { 
                     "foodDetails.status": "picked_up",
@@ -90,7 +112,7 @@ export const updateFoodStatus_to_picked_up = AsyncHandler(async (req, res) => {
 
     } catch (error) {
         console.error("Update Error:", error);
-        res.status(500).json({ message: "Internal Server Error" });
+        res.status(500).json({ message: "Internal Server Error", error });
     }
 });
 

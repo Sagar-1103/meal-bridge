@@ -1,4 +1,5 @@
  import mongoose from "mongoose";
+import type from "mongoose/lib/schema/operators/type";
 
 const listItemSchema = new mongoose.Schema({
     listID: {
@@ -50,6 +51,22 @@ const listItemSchema = new mongoose.Schema({
       description: String,
       imageURL: String,
     },
+    checklist: {
+        deliveryimage_URL:{type:String},
+        checked: { type: Boolean },
+        checkQuestions: {
+            question1: { type: Boolean, default: false },
+            question2: { type: Boolean, default: false },
+            question3: { type: Boolean, default: false },
+            question4: { type: Boolean, default: false },
+            question5: { type: Boolean, default: false },
+            question6: { type: Boolean, default: false },
+            question7: { type: Boolean, default: false },
+            question8: { type: Boolean, default: false },
+            question9: { type: Boolean, default: false },
+            question10: { type: Boolean, default: false }
+        }
+    }
   }, { timestamps: true });
   
 export default mongoose.model("ListItem", listItemSchema);
